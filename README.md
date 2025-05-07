@@ -1,5 +1,3 @@
-
-```markdown
 # Vsesvit AI Python SDK
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-blue.svg)
@@ -338,4 +336,3 @@ If you have any questions or issues, please create an Issue in this repository.
 ---
 
 Created with ❤️ by the [Vsesvit AI](https://vsesvit.ai/) team | [Register](https://us.vsesvit.ai/en/register) | [Blog](https://vsesvit.ai/blog)
-```
