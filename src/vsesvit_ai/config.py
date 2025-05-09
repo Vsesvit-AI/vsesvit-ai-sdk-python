@@ -9,9 +9,16 @@ from dotenv import load_dotenv
 # This won't cause an error if the file is missing
 load_dotenv()
 
-# Supported resource types
-# A comma-separated list of API resources the SDK can handle
-SUPPORTED_RESOURCES = os.getenv('SUPPORTED_RESOURCES', 'article,project').split(',')
+SUPPORTED_RESOURCES = [
+    'article',
+    'project',
+    'landing',
+    'knowledge_base',
+    'user',
+    'author',
+    'audience',
+    'smart_table'
+]
 
 # API key format settings
 # The prefix that all valid API keys must start with

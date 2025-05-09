@@ -1,16 +1,16 @@
 import re
 import requests
 from typing import Tuple
-from src.vsesvit_ai.config import SUPPORTED_RESOURCES, API_KEY_PREFIX, API_KEY_LENGTH
+from src.vsesvit_ai.config import API_KEY_PREFIX, API_KEY_LENGTH
 from src.vsesvit_ai.base.exceptions import *
 from src.vsesvit_ai.errors.error_massages import *
 
 
 def parse_resource_info(endpoint: str) -> Tuple[Optional[str], Optional[str]]:
     patterns = [
-        r'^(?P<resource>\w+)/(?P<id>\d+)',
-        r'^(?P<resource>\w+)/(?P<id>\d+)/\w+',
-        r'^(?P<resource>\w+)'
+        r'^(?P<resource>[\w-]+)/(?P<id>\d+)',
+        r'^(?P<resource>[\w-]+)/(?P<id>\d+)/\w+',
+        r'^(?P<resource>[\w-]+)'
     ]
 
     for pattern in patterns:
@@ -100,6 +100,7 @@ def handle_error_response(
     resource_type, resource_id = parse_resource_info(endpoint)
 
     if status_code == 401:
+        # Если API ключ имеет неверный формат, это точно ошибка аутентификации
         if not is_valid_api_key_format(api_key):
             raise AuthenticationError(
                 message=ERROR_INVALID_API_KEY,
@@ -107,7 +108,8 @@ def handle_error_response(
                 response_body=response_body
             )
 
-        if resource_type in SUPPORTED_RESOURCES and resource_id:
+        # Если запрос был к конкретному ресурсу, это проблема с доступом
+        if resource_type and resource_id:
             raise AccessDeniedError(
                 resource_type=resource_type,
                 resource_id=resource_id,
@@ -116,6 +118,7 @@ def handle_error_response(
                 response_body=response_body
             )
 
+        # В остальных случаях - ошибка аутентификации
         raise AuthenticationError(
             message=ERROR_INVALID_API_KEY,
             status_code=status_code,
@@ -132,24 +135,17 @@ def handle_error_response(
         )
 
     elif status_code == 404:
-
         message = ERROR_RESOURCE_NOT_FOUND.format(resource=resource_type or "resource")
 
         if resource_id:
             message += f" (ID: {resource_id})"
 
         raise ResourceNotFoundError(
-
             resource_type=resource_type or "resource",
-
             resource_id=resource_id,
-
             message=message,
-
             status_code=status_code,
-
             response_body=response_body
-
         )
 
     elif status_code == 400:

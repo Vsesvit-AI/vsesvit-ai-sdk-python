@@ -29,8 +29,18 @@ With Vsesvit AI SDK, you can programmatically:
 
 ## 🚀 Installation
 
+### Via pip (recommended)
+
 ```bash
 pip install vsesvit-ai
+```
+
+### From source
+
+```bash
+git clone https://github.com/vsesvitai/vsesvit-ai-python.git
+cd vsesvit-ai-python
+pip install -e .
 ```
 
 ## 🔑 Getting an API Key
@@ -262,6 +272,444 @@ client.project.unarchive(project_id)
 print(f"Project ID {project_id} successfully restored from archive")
 ```
 
+### Working with Landing Pages
+
+The SDK provides functionality for working with landing pages through the `Landing` class.
+
+#### Getting Landing Page List
+
+The `get_list()` method returns a list of all landing pages in your account with pagination and filtering options.
+
+```python
+# Get all landing pages with pagination
+landings = client.landing.get_list(params={
+    "page": 1,
+    "limit": 10,
+    "sort": "createdAt",
+    "direction": "desc"
+})
+
+# Display landing pages information
+print(f"Total landing pages: {landings['meta']['total']}")
+
+# Process the landing page list
+for landing in landings['data']:
+    print(f"ID: {landing['id']} | Name: {landing['name']}")
+```
+
+#### Getting Landing Page Information
+
+The `get_by_id()` method returns detailed information about a specific landing page.
+
+```python
+# ID of the landing page to retrieve
+landing_id = 123
+
+# Get detailed information about the landing page
+landing = client.landing.get_by_id(landing_id)
+
+# Display landing page information
+print(f"Landing page name: {landing['data']['name']}")
+print(f"Created at: {landing['data']['createdAt']}")
+print(f"Status: {landing['data']['state']}")
+```
+
+#### Creating a New Landing Page
+
+The `create()` method allows you to create new landing pages programmatically.
+
+```python
+# Data for creating a landing page
+landing_data = {
+    "projectId": 951,  # Your project ID in Vsesvit AI (required field)
+    "name": "Product Launch Landing Page",  # Landing page title
+    "brief": "A landing page for our new product launch with emphasis on benefits and call-to-action",  # Brief description
+    "requestSections": 5,  # Requested number of sections (optional)
+    "quality": "premium",  # Quality level (basic, standard, premium)
+    "country": "US",  # Country code for regional content adaptation
+    "language": "en",  # Landing page language code
+    "imageModel": "dalle3",  # Model for image generation (optional)
+    "publishUrl": "https://example.com/product-launch",  # URL where the landing will be published (optional)
+    "formHandlerUrl": "https://example.com/form-handler",  # Form handler URL (optional)
+    "privacyPolicy": "https://example.com/privacy",  # Privacy policy link (optional)
+    "termsAndConditions": "https://example.com/terms",  # Terms and conditions link (optional)
+    
+    # Optional JavaScript libraries to include
+    "useChartJs": False,
+    "useSwiper": True,
+    "useAOS": True,
+    "useTypedJs": False,
+    "useVanilaTiltJs": False,
+    "useScrollReveal": True,
+    "useCountUpJs": False,
+    "useRellax": False,
+    "useGlowCookies": True,
+    
+    # Optional template and audience configuration
+    "templateId": 1,  # ID of the template to use (optional)
+    "audienceId": 2,  # ID of the target audience (optional)
+    "knowledgeIds": [3, 4],  # IDs of knowledge bases to use (optional)
+    
+    # Required content configuration
+    "keywords": ["product launch", "new features", "limited offer"],  # Keywords to include
+    "rules": "Focus on benefits, include testimonials, strong call-to-action",  # Writing style rules
+    "externalLinks": ["https://example.com/product-details"],  # External links to include
+    "contentSources": ["https://example.com/product-blog"],  # Source URLs for content research
+    
+    # Optional section configuration
+    "sections": [
+        {
+            "type": "header",
+            "title": "Revolutionary New Product"
+        },
+        {
+            "type": "benefits",
+            "title": "Key Benefits"
+        },
+        {
+            "type": "testimonials",
+            "title": "What Our Customers Say"
+        }
+    ]
+}
+
+# Create the landing page
+try:
+    landing = client.landing.create(landing_data)
+    print(f"Landing page created successfully! ID: {landing['data']['id']}")
+    print(f"Landing page URL: https://us.vsesvit.ai/en/landings/{landing['data']['id']}")
+except Exception as e:
+    print(f"Error creating landing page: {e}")
+```
+
+#### Downloading a Landing Page
+
+The `download()` method allows you to download a landing page as a ZIP file.
+
+```python
+# Landing page ID for download
+landing_id = 123
+
+# Download a landing page in ZIP format
+# Specify landing ID and path to save the file
+file_path = client.landing.download(landing_id, "my_landing.zip")
+print(f"Landing page downloaded as ZIP and saved to file: {file_path}")
+```
+
+#### Managing Landing Pages
+
+You can archive and unarchive landing pages using the respective methods.
+
+```python
+# Landing page ID for management
+landing_id = 123
+
+# Archive a landing page
+client.landing.archive(landing_id)
+print(f"Landing page ID {landing_id} successfully archived")
+
+# Restore a landing page from the archive
+client.landing.unarchive(landing_id)
+print(f"Landing page ID {landing_id} successfully restored from archive")
+```
+
+### Working with Smart Tables
+
+The SDK offers functionality for enhancing product tables through the `SmartTable` class.
+
+#### Getting Smart Table List
+
+The `get_list()` method returns a list of all smart tables in your account with pagination and filtering options.
+
+```python
+# Get all smart tables with pagination
+smart_tables = client.smart_table.get_list(params={
+    "page": 1,
+    "limit": 10,
+    "sort": "createdAt",
+    "direction": "desc"
+})
+
+# Display smart tables information
+print(f"Total smart tables: {smart_tables['meta']['total']}")
+
+# Process the smart table list
+for table in smart_tables['data']:
+    print(f"ID: {table['id']} | Name: {table['name']}")
+```
+
+#### Getting Smart Table Information
+
+The `get_by_id()` method returns detailed information about a specific smart table.
+
+```python
+# ID of the smart table to retrieve
+table_id = 456
+
+# Get detailed information about the smart table
+table = client.smart_table.get_by_id(table_id)
+
+# Display smart table information
+print(f"Smart table name: {table['data']['name']}")
+print(f"Created at: {table['data']['createdAt']}")
+print(f"Status: {table['data']['state']}")
+```
+
+#### Uploading a File for Smart Table Processing
+
+Before creating a smart table, you need to upload an XLSX file that will be enhanced.
+
+```python
+# Path to the XLSX file on your local machine
+file_path = "products.xlsx"
+
+# Upload the file
+try:
+    upload_result = client.smart_table.upload(file_path)
+    input_asset_id = upload_result["data"]["id"]
+    print(f"File uploaded successfully! Asset ID: {input_asset_id}")
+    
+    # This input_asset_id will be used when creating the smart table
+except Exception as e:
+    print(f"Error uploading file: {e}")
+```
+
+#### Creating a New Smart Table
+
+After uploading a file, you can create a smart table using the `create()` method.
+
+```python
+# Data for creating a smart table, using the input_asset_id from the upload step
+smart_table_data = {
+    "projectId": 951,  # Your project ID in Vsesvit AI (required field)
+    "name": "Product Catalog Enhancement",  # Smart table title
+    "brief": "Generate compelling product descriptions based on the technical specifications",  # Brief instructions
+    "quality": "premium",  # Quality level (basic, standard, premium)
+    "inputAssetId": input_asset_id,  # ID of the uploaded XLSX file
+    "limitRows": 0,  # Number of rows to process (0 for all)
+    "offsetRows": 0,  # Number of rows to skip before processing
+    
+    # Column definitions for processing
+    "columns": [
+        {
+            "name": "Product Name",  # Column name from the original file
+            "action": "keep"  # Keep the original data
+        },
+        {
+            "name": "Technical Specs",  # Column name from the original file
+            "action": "source"  # Use as a source for enhancement
+        },
+        {
+            "name": "Description",  # New column name
+            "action": "generate",  # Generate content for this column
+            "prompt": "Create a compelling product description based on the technical specifications",  # Instructions for generation
+            "maxWords": 100  # Maximum word count for generated content
+        }
+    ]
+}
+
+# Create the smart table
+try:
+    smart_table = client.smart_table.create(smart_table_data)
+    print(f"Smart table created successfully! ID: {smart_table['data']['id']}")
+    print(f"Smart table URL: https://us.vsesvit.ai/en/smart-tables/{smart_table['data']['id']}")
+except Exception as e:
+    print(f"Error creating smart table: {e}")
+```
+
+#### Downloading a Smart Table
+
+The `download()` method allows you to download the enhanced smart table as an XLSX file.
+
+```python
+# Smart table ID for download
+table_id = 456
+
+# Download a smart table in XLSX format
+# Specify table ID and path to save the file
+file_path = client.smart_table.download(table_id, "enhanced_products.xlsx")
+print(f"Smart table downloaded as XLSX and saved to file: {file_path}")
+```
+
+#### Managing Smart Tables
+
+You can archive and unarchive smart tables using the respective methods.
+
+```python
+# Smart table ID for management
+table_id = 456
+
+# Archive a smart table
+client.smart_table.archive(table_id)
+print(f"Smart table ID {table_id} successfully archived")
+
+# Restore a smart table from the archive
+client.smart_table.unarchive(table_id)
+print(f"Smart table ID {table_id} successfully restored from archive")
+```
+
+### Working with Knowledge Bases
+
+The SDK provides access to knowledge bases through the `KnowledgeBase` class.
+
+#### Getting Knowledge Base List
+
+The `get_list()` method returns a list of all knowledge bases in your account with pagination and filtering options.
+
+```python
+# Get all knowledge bases with pagination
+knowledge_bases = client.knowledge_base.get_list(params={
+    "page": 1,
+    "limit": 10
+})
+
+# Display knowledge bases information
+print(f"Total knowledge bases: {knowledge_bases['meta']['total']}")
+
+# Process the knowledge base list
+for kb in knowledge_bases['data']:
+    print(f"ID: {kb['id']} | Name: {kb['name']}")
+```
+
+#### Getting Knowledge Base Information
+
+The `get_by_id()` method returns detailed information about a specific knowledge base.
+
+```python
+# ID of the knowledge base to retrieve
+kb_id = 789
+
+# Get detailed information about the knowledge base
+kb = client.knowledge_base.get_by_id(kb_id)
+
+# Display knowledge base information
+print(f"Knowledge base name: {kb['data']['name']}")
+print(f"Created at: {kb['data']['createdAt']}")
+```
+
+### Working with Authors
+
+The SDK allows you to interact with digital authors through the `Author` class.
+
+#### Getting Author List
+
+The `get_list()` method returns a list of all authors in your account with pagination and filtering options.
+
+```python
+# Get all authors with pagination
+authors = client.author.get_list(params={
+    "page": 1,
+    "limit": 10
+})
+
+# Display authors information
+print(f"Total authors: {authors['meta']['total']}")
+
+# Process the author list
+for author in authors['data']:
+    print(f"ID: {author['id']} | Name: {author['name']}")
+```
+
+#### Getting Author Information
+
+The `get_by_id()` method returns detailed information about a specific author.
+
+```python
+# ID of the author to retrieve
+author_id = 321
+
+# Get detailed information about the author
+author = client.author.get_by_id(author_id)
+
+# Display author information
+print(f"Author name: {author['data']['name']}")
+print(f"Created at: {author['data']['createdAt']}")
+print(f"Specialization: {author['data']['specialization']}")
+```
+
+### Working with Audiences
+
+The SDK provides functionality for managing target audiences through the `Audience` class.
+
+#### Getting Audience List
+
+The `get_list()` method returns a list of all audiences in your account with pagination and filtering options.
+
+```python
+# Get all audiences with pagination
+audiences = client.audience.get_list(params={
+    "page": 1,
+    "limit": 10
+})
+
+# Display audiences information
+print(f"Total audiences: {audiences['meta']['total']}")
+
+# Process the audience list
+for audience in audiences['data']:
+    print(f"ID: {audience['id']} | Name: {audience['name']}")
+```
+
+#### Getting Audience Information
+
+The `get_by_id()` method returns detailed information about a specific audience.
+
+```python
+# ID of the audience to retrieve
+audience_id = 654
+
+# Get detailed information about the audience
+audience = client.audience.get_by_id(audience_id)
+
+# Display audience information
+print(f"Audience name: {audience['data']['name']}")
+print(f"Created at: {audience['data']['createdAt']}")
+print(f"Description: {audience['data']['description']}")
+```
+
+### Working with User Information
+
+The SDK provides access to user information through the `User` class.
+
+#### Getting Current User Information
+
+The `get_me()` method returns information about the current authenticated user.
+
+```python
+# Get information about the current user
+user = client.user.get_me()
+
+# Display user information
+print(f"User ID: {user['data']['id']}")
+print(f"Email: {user['data']['email']}")
+print(f"Full Name: {user['data']['fullName']}")
+print(f"Company: {user['data']['company']}")
+print(f"Balance: {user['data']['balance']}")
+```
+
+#### Getting Referrals Information
+
+The `get_referrals()` method returns a list of users who signed up using the current user's referral code.
+
+```python
+# Get referrals with pagination and search options
+referrals = client.user.get_referrals(params={
+    "offset": 0,  # Number of items to skip
+    "limit": 10,  # Number of items to return
+    "search": ""  # Search string to filter referrals by name (optional)
+})
+
+# Display referrals information
+if 'data' in referrals and len(referrals['data']) > 0:
+    print(f"Total referrals: {len(referrals['data'])}")
+    
+    # Process the referrals list
+    for referral in referrals['data']:
+        print(f"ID: {referral['id']} | Name: {referral['name']} | Joined: {referral['createdAt']}")
+else:
+    print("No referrals found")
+```
+
 ## 🔄 Error Handling
 
 The [Vsesvit AI](https://vsesvit.ai/) SDK provides an informative error handling system that allows you to accurately identify and fix any issues. All exceptions contain clear messages in natural language.
@@ -304,22 +752,9 @@ except NetworkError as e:
 The SDK is built with a modular architecture for extensibility and maintainability:
 
 - **Base Client (`VsesvitAI`)**: Handles authentication and API communication
-- **Resource Classes**: Provide methods for specific API resources (Article, Project)
+- **Resource Classes**: Provide methods for specific API resources (Article, Project, Landing, SmartTable, etc.)
 - **Error Handling System**: Provides detailed error messages and appropriate exception types
 - **Configuration System**: Centralizes SDK settings and allows for customization
-
-## 📋 Planned Functionality
-
-This version of the SDK supports working with articles and projects. As the [Vsesvit AI service](https://vsesvit.ai/) evolves, we will be expanding the SDK's functionality by adding:
-
-- **Landing page operations** — generation and management of landing pages
-- **SmartTables interaction** — automatic enhancement of tables
-- **Digital author management** — creation and training of AI authors
-- **Knowledge base operations** — management of information sources
-- **Target audience configuration** — setting up reader profiles
-- **And much more!**
-
-Stay tuned for updates in our repository and on the [official Vsesvit AI website](https://vsesvit.ai/)!
 
 ## 📚 Documentation
 

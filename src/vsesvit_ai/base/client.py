@@ -2,6 +2,12 @@ import requests
 from typing import Optional, Dict, Any, Union
 from src.vsesvit_ai.base.article import Article
 from src.vsesvit_ai.base.project import Project
+from src.vsesvit_ai.base.landing import Landing
+from src.vsesvit_ai.base.smart_table import SmartTable
+from src.vsesvit_ai.base.knowledge_base import KnowledgeBase
+from src.vsesvit_ai.base.audience import Audience
+from src.vsesvit_ai.base.author import Author
+from src.vsesvit_ai.base.user import User
 from src.vsesvit_ai.base.exceptions import NetworkError
 from src.vsesvit_ai.errors.error_massages import ERROR_NETWORK
 from src.vsesvit_ai.errors.error_handlers import handle_error_response
@@ -24,6 +30,12 @@ class VsesvitAI:
         self.debug = debug
         self.article = Article(self)
         self.project = Project(self)
+        self.landing = Landing(self)
+        self.knowledge_base = KnowledgeBase(self)
+        self.smart_table = SmartTable(self)
+        self.author = Author(self)
+        self.audience = Audience(self)
+        self.user = User(self)
 
     def request(
             self,
