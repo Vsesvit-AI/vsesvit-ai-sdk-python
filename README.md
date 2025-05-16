@@ -117,56 +117,53 @@ content = article['data']['content']
 
 #### Creating a New Article
 
-The `create()` method allows you to programmatically create new articles. You can configure various generation parameters, including title, description, language, word count, and article structure by sections.
+The `create()` method allows you to programmatically create new articles. The method now has mandatory parameters separated from optional ones for better clarity and IDE support.
 
 ```python
-# Data for creating an article
-article_data = {
-    "projectId": 951,  # Your project ID in Vsesvit AI (required field)
-    "name": "How to Develop a Python SDK for Vsesvit AI API",  # Article title
-    "brief": "A detailed guide to creating an SDK for API with code examples and best practices for error handling",  # Brief description
-    "requestWords": 1000,  # Total word count (must match the sum of words in sections)
-    "quality": "premium",  # Quality level (basic, standard, premium)
-    "country": "US",  # Country code for regional content adaptation
-    "language": "en",  # Article language code
-    
-    # Additional formatting parameters
-    "useImages": True,  # Include images
-    "useTOC": True,  # Create table of contents
-    "useBulletLists": True,  # Use bullet lists
-    "useQuotes": True,  # Include quotes
-    "useTables": True,  # Include tables
-    
-    # Article structure by sections
-    "sections": [
-        {
-            "type": "H2",  # Heading type (H1, H2, H3, etc.)
-            "title": "Introduction to SDK Development for APIs",  # Section title
-            "requestWords": 300,  # Word count for this section
-            "elements": ["image", "bullet_list"]  # Formatting elements
-        },
-        {
-            "type": "H2",
-            "title": "Best Practices for Error Handling in SDKs",
-            "requestWords": 400,
-            "elements": ["table", "quote"]
-        },
-        {
-            "type": "H2",
-            "title": "Conclusions and Recommendations for SDK Development",
-            "requestWords": 300,
-            "elements": ["bullet_list"]
-        }
-    ]
-}
+# Create an article with required parameters
+article = client.article.create(
+    project_id=951,  # Your project ID in Vsesvit AI (required)
+    name="How to Develop a Python SDK for Vsesvit AI API",  # Article title (required)
+    brief="A detailed guide to creating an SDK for API with code examples and best practices for error handling",  # Brief description (required)
+    additional_params={
+        "requestWords": 1000,  # Total word count (default: 3000)
+        "quality": "premium",  # Quality level (basic, standard, premium)
+        "country": "US",  # Country code for regional content adaptation
+        "language": "en",  # Article language code
+        
+        # Additional formatting parameters
+        "useImages": True,  # Include images
+        "useTOC": True,  # Create table of contents
+        "useBulletLists": True,  # Use bullet lists
+        "useQuotes": True,  # Include quotes
+        "useTables": True,  # Include tables
+        
+        # Article structure by sections
+        "sections": [
+            {
+                "type": "H2",  # Heading type (H1, H2, H3, etc.)
+                "title": "Introduction to SDK Development for APIs",  # Section title
+                "requestWords": 300,  # Word count for this section
+                "elements": ["image", "bullet_list"]  # Formatting elements
+            },
+            {
+                "type": "H2",
+                "title": "Best Practices for Error Handling in SDKs",
+                "requestWords": 400,
+                "elements": ["table", "quote"]
+            },
+            {
+                "type": "H2",
+                "title": "Conclusions and Recommendations for SDK Development",
+                "requestWords": 300,
+                "elements": ["bullet_list"]
+            }
+        ]
+    }
+)
 
-# Create the article
-try:
-    article = client.article.create(article_data)
-    print(f"Article created successfully! ID: {article['data']['id']}")
-    print(f"Article URL: https://us.vsesvit.ai/en/articles/{article['data']['id']}")
-except Exception as e:
-    print(f"Error creating article: {e}")
+print(f"Article created successfully! ID: {article['data']['id']}")
+print(f"Article URL: https://us.vsesvit.ai/en/articles/{article['data']['id']}")
 ```
 
 #### Managing Articles
@@ -238,21 +235,16 @@ print(f"Created at: {project['data']['createdAt']}")
 
 #### Creating a New Project
 
-The `create()` method allows you to create new projects programmatically.
+The `create()` method allows you to create new projects programmatically with required parameters separated.
 
 ```python
-# Data for creating a project
-project_data = {
-    "name": "Content Marketing Campaign",
-    "description": "Project for our Q2 content marketing campaign"
-}
+# Create a project with required parameters
+project = client.project.create(
+    name="Content Marketing Campaign",  # Project name (required)
+    description="Project for our Q2 content marketing campaign"  # Detailed description (required)
+)
 
-# Create the project
-try:
-    project = client.project.create(project_data)
-    print(f"Project created successfully! ID: {project['data']['id']}")
-except Exception as e:
-    print(f"Error creating project: {e}")
+print(f"Project created successfully! ID: {project['data']['id']}")
 ```
 
 #### Managing Projects
@@ -316,70 +308,63 @@ print(f"Status: {landing['data']['state']}")
 
 #### Creating a New Landing Page
 
-The `create()` method allows you to create new landing pages programmatically.
+The `create()` method allows you to create new landing pages with required parameters separated for better clarity.
 
 ```python
-# Data for creating a landing page
-landing_data = {
-    "projectId": 951,  # Your project ID in Vsesvit AI (required field)
-    "name": "Product Launch Landing Page",  # Landing page title
-    "brief": "A landing page for our new product launch with emphasis on benefits and call-to-action",  # Brief description
-    "requestSections": 5,  # Requested number of sections (optional)
-    "quality": "premium",  # Quality level (basic, standard, premium)
-    "country": "US",  # Country code for regional content adaptation
-    "language": "en",  # Landing page language code
-    "imageModel": "dalle3",  # Model for image generation (optional)
-    "publishUrl": "https://example.com/product-launch",  # URL where the landing will be published (optional)
-    "formHandlerUrl": "https://example.com/form-handler",  # Form handler URL (optional)
-    "privacyPolicy": "https://example.com/privacy",  # Privacy policy link (optional)
-    "termsAndConditions": "https://example.com/terms",  # Terms and conditions link (optional)
-    
-    # Optional JavaScript libraries to include
-    "useChartJs": False,
-    "useSwiper": True,
-    "useAOS": True,
-    "useTypedJs": False,
-    "useVanilaTiltJs": False,
-    "useScrollReveal": True,
-    "useCountUpJs": False,
-    "useRellax": False,
-    "useGlowCookies": True,
-    
-    # Optional template and audience configuration
-    "templateId": 1,  # ID of the template to use (optional)
-    "audienceId": 2,  # ID of the target audience (optional)
-    "knowledgeIds": [3, 4],  # IDs of knowledge bases to use (optional)
-    
-    # Required content configuration
-    "keywords": ["product launch", "new features", "limited offer"],  # Keywords to include
-    "rules": "Focus on benefits, include testimonials, strong call-to-action",  # Writing style rules
-    "externalLinks": ["https://example.com/product-details"],  # External links to include
-    "contentSources": ["https://example.com/product-blog"],  # Source URLs for content research
-    
-    # Optional section configuration
-    "sections": [
-        {
-            "type": "header",
-            "title": "Revolutionary New Product"
-        },
-        {
-            "type": "benefits",
-            "title": "Key Benefits"
-        },
-        {
-            "type": "testimonials",
-            "title": "What Our Customers Say"
-        }
-    ]
-}
+# Create a landing page with required parameters
+landing = client.landing.create(
+    project_id=951,  # Your project ID in Vsesvit AI (required)
+    name="Product Launch Landing Page",  # Landing page title (required)
+    brief="A landing page for our new product launch with emphasis on benefits and call-to-action",  # Brief description (required)
+    additional_params={
+        "requestSections": 5,  # Requested number of sections (default: 10)
+        "quality": "premium",  # Quality level (basic, standard, premium)
+        "country": "US",  # Country code for regional content adaptation
+        "language": "en",  # Landing page language code
+        "imageModel": "dalle3",  # Model for image generation
+        "publishUrl": "https://example.com/product-launch",  # URL where the landing will be published
+        "formHandlerUrl": "https://example.com/form-handler",  # Form handler URL
+        "privacyPolicy": "https://example.com/privacy",  # Privacy policy link
+        "termsAndConditions": "https://example.com/terms",  # Terms and conditions link
+        
+        # Optional JavaScript libraries to include
+        "useChartJs": False,
+        "useSwiper": True,
+        "useAOS": True,
+        "useTypedJs": False,
+        "useVanilaTiltJs": False,
+        "useScrollReveal": True,
+        "useCountUpJs": False,
+        "useRellax": False,
+        "useGlowCookies": True,
+        
+        # Optional template and audience configuration
+        "templateId": 1,  # ID of the template to use
+        "audienceId": 2,  # ID of the target audience
+        "knowledgeIds": [3, 4],  # IDs of knowledge bases to use
+        
+        # Optional content configuration
+        "keywords": [{"value": "product launch", "quantity": 3}],  # Keywords to include
+        "rules": [{"rule": "Focus on benefits"}],  # Writing style rules
+        "externalLinks": [{"url": "https://example.com/product-details"}],  # External links
+        "contentSources": [{"url": "https://example.com/product-blog"}],  # Source URLs
+        
+        # Optional section configuration
+        "sections": [
+            {
+                "type": "header",
+                "title": "Revolutionary New Product"
+            },
+            {
+                "type": "benefits",
+                "title": "Key Benefits"
+            }
+        ]
+    }
+)
 
-# Create the landing page
-try:
-    landing = client.landing.create(landing_data)
-    print(f"Landing page created successfully! ID: {landing['data']['id']}")
-    print(f"Landing page URL: https://us.vsesvit.ai/en/landings/{landing['data']['id']}")
-except Exception as e:
-    print(f"Error creating landing page: {e}")
+print(f"Landing page created successfully! ID: {landing['data']['id']}")
+print(f"Landing page URL: https://us.vsesvit.ai/en/landings/{landing['data']['id']}")
 ```
 
 #### Downloading a Landing Page
@@ -476,45 +461,42 @@ except Exception as e:
 
 #### Creating a New Smart Table
 
-After uploading a file, you can create a smart table using the `create()` method.
+After uploading a file, you can create a smart table using the `create()` method with required parameters separated.
 
 ```python
-# Data for creating a smart table, using the input_asset_id from the upload step
-smart_table_data = {
-    "projectId": 951,  # Your project ID in Vsesvit AI (required field)
-    "name": "Product Catalog Enhancement",  # Smart table title
-    "brief": "Generate compelling product descriptions based on the technical specifications",  # Brief instructions
-    "quality": "premium",  # Quality level (basic, standard, premium)
-    "inputAssetId": input_asset_id,  # ID of the uploaded XLSX file
-    "limitRows": 0,  # Number of rows to process (0 for all)
-    "offsetRows": 0,  # Number of rows to skip before processing
-    
-    # Column definitions for processing
-    "columns": [
-        {
-            "name": "Product Name",  # Column name from the original file
-            "action": "keep"  # Keep the original data
-        },
-        {
-            "name": "Technical Specs",  # Column name from the original file
-            "action": "source"  # Use as a source for enhancement
-        },
-        {
-            "name": "Description",  # New column name
-            "action": "generate",  # Generate content for this column
-            "prompt": "Create a compelling product description based on the technical specifications",  # Instructions for generation
-            "maxWords": 100  # Maximum word count for generated content
-        }
-    ]
-}
+# Create a smart table with required parameters, using the input_asset_id from upload
+smart_table = client.smart_table.create(
+    project_id=951,  # Your project ID in Vsesvit AI (required)
+    name="Product Catalog Enhancement",  # Smart table title (required)
+    brief="Generate compelling product descriptions based on the technical specifications",  # Brief instructions (required)
+    input_asset_id=input_asset_id,  # ID of the uploaded XLSX file (required)
+    additional_params={
+        "quality": "premium",  # Quality level (basic, standard, premium)
+        "limitRows": 0,  # Number of rows to process (0 for all)
+        "offsetRows": 0,  # Number of rows to skip before processing
+        
+        # Column definitions for processing
+        "columns": [
+            {
+                "name": "Product Name",  # Column name from the original file
+                "action": "keep"  # Keep the original data
+            },
+            {
+                "name": "Technical Specs",  # Column name from the original file
+                "action": "source"  # Use as a source for enhancement
+            },
+            {
+                "name": "Description",  # New column name
+                "action": "generate",  # Generate content for this column
+                "prompt": "Create a compelling product description",  # Instructions
+                "maxWords": 100  # Maximum word count for generated content
+            }
+        ]
+    }
+)
 
-# Create the smart table
-try:
-    smart_table = client.smart_table.create(smart_table_data)
-    print(f"Smart table created successfully! ID: {smart_table['data']['id']}")
-    print(f"Smart table URL: https://us.vsesvit.ai/en/smart-tables/{smart_table['data']['id']}")
-except Exception as e:
-    print(f"Error creating smart table: {e}")
+print(f"Smart table created successfully! ID: {smart_table['data']['id']}")
+print(f"Smart table URL: https://us.vsesvit.ai/en/smart-tables/{smart_table['data']['id']}")
 ```
 
 #### Downloading a Smart Table
@@ -587,6 +569,45 @@ print(f"Knowledge base name: {kb['data']['name']}")
 print(f"Created at: {kb['data']['createdAt']}")
 ```
 
+#### Creating a New Knowledge Base
+
+The `create()` method allows you to create new knowledge bases with required parameters separated.
+
+```python
+# Create a knowledge base with required parameters
+kb = client.knowledge_base.create(
+    project_id=951,  # Your project ID in Vsesvit AI (required)
+    name="Company Documentation",  # Knowledge base name (required)
+    description="Comprehensive documentation for our company products and services",  # Description (required)
+    additional_params={
+        "language": "en",  # Language of the knowledge base (ISO 639-1 code)
+        "sources": [
+            {"url": "https://docs.company.com/products"},  # Web sources
+            {"query": "company product documentation"}  # Search-based sources
+        ]
+    }
+)
+
+print(f"Knowledge base created successfully! ID: {kb['data']['id']}")
+```
+
+#### Managing Knowledge Bases
+
+You can archive and unarchive knowledge bases using the respective methods.
+
+```python
+# Knowledge base ID for management
+kb_id = 789
+
+# Archive a knowledge base
+client.knowledge_base.archive(kb_id)
+print(f"Knowledge base ID {kb_id} successfully archived")
+
+# Restore a knowledge base from the archive
+client.knowledge_base.unarchive(kb_id)
+print(f"Knowledge base ID {kb_id} successfully restored from archive")
+```
+
 ### Working with Authors
 
 The SDK allows you to interact with digital authors through the `Author` class.
@@ -624,7 +645,50 @@ author = client.author.get_by_id(author_id)
 # Display author information
 print(f"Author name: {author['data']['name']}")
 print(f"Created at: {author['data']['createdAt']}")
-print(f"Specialization: {author['data']['specialization']}")
+print(f"Biography: {author['data']['biography']}")
+```
+
+#### Creating a New Author
+
+The `create()` method allows you to create new authors with required parameters separated.
+
+```python
+# Create an author with required parameters
+author = client.author.create(
+    project_id=951,  # Your project ID in Vsesvit AI (required)
+    name="John Smith",  # Author name (required)
+    biography="John Smith is a senior software engineer with over 15 years of experience in web development.",  # Biography (required)
+    additional_params={
+        "ppm": {  # Author persona parameters
+            "writing_style": "technical",
+            "tone": "professional",
+            "expertise": "web development"
+        },
+        "sources": [  # Training sources for the author's writing style
+            {"url": "https://example.com/author-articles"},
+            {"url": "https://medium.com/@johnsmith"}
+        ]
+    }
+)
+
+print(f"Author created successfully! ID: {author['data']['id']}")
+```
+
+#### Managing Authors
+
+You can archive and unarchive authors using the respective methods.
+
+```python
+# Author ID for management
+author_id = 321
+
+# Archive an author
+client.author.archive(author_id)
+print(f"Author ID {author_id} successfully archived")
+
+# Restore an author from the archive
+client.author.unarchive(author_id)
+print(f"Author ID {author_id} successfully restored from archive")
 ```
 
 ### Working with Audiences
@@ -664,7 +728,46 @@ audience = client.audience.get_by_id(audience_id)
 # Display audience information
 print(f"Audience name: {audience['data']['name']}")
 print(f"Created at: {audience['data']['createdAt']}")
-print(f"Description: {audience['data']['description']}")
+```
+
+#### Creating a New Audience
+
+The `create()` method allows you to create new audiences with required parameters separated.
+
+```python
+# Create an audience with required parameters
+audience = client.audience.create(
+    project_id=951,  # Your project ID in Vsesvit AI (required)
+    name="Young Professionals",  # Audience name (required)
+    additional_params={
+        "ageGroup": "25-35",
+        "gender": "All genders",
+        "occupation": "IT professionals, software developers, project managers",
+        "educationLevel": "Bachelor's degree or higher",
+        "incomeBracket": "$50,000 - $100,000 annually",
+        "interests": "Technology, career development, productivity",
+        "painPoints": "Time management, work-life balance, career growth"
+    }
+)
+
+print(f"Audience created successfully! ID: {audience['data']['id']}")
+```
+
+#### Managing Audiences
+
+You can archive and unarchive audiences using the respective methods.
+
+```python
+# Audience ID for management
+audience_id = 654
+
+# Archive an audience
+client.audience.archive(audience_id)
+print(f"Audience ID {audience_id} successfully archived")
+
+# Restore an audience from the archive
+client.audience.unarchive(audience_id)
+print(f"Audience ID {audience_id} successfully restored from archive")
 ```
 
 ### Working with User Information
@@ -755,6 +858,28 @@ The SDK is built with a modular architecture for extensibility and maintainabili
 - **Resource Classes**: Provide methods for specific API resources (Article, Project, Landing, SmartTable, etc.)
 - **Error Handling System**: Provides detailed error messages and appropriate exception types
 - **Configuration System**: Centralizes SDK settings and allows for customization
+
+### Method Signature Design
+
+All `create()` methods in the SDK follow a consistent pattern where required parameters are separated from optional ones for better clarity and IDE support. This design choice provides several benefits:
+
+- **IDE Auto-completion**: Your IDE can suggest required parameters directly
+- **Clear Requirements**: It's immediately obvious which parameters are mandatory
+- **Better Documentation**: Required and optional parameters are clearly distinguished
+- **Type Safety**: Required parameters are properly type-hinted
+
+Example:
+```python
+# Clear separation of required and optional parameters
+result = client.resource.create(
+    required_param1="value1",  # Required
+    required_param2="value2",  # Required
+    additional_params={        # Optional
+        "optional1": "value",
+        "optional2": 123
+    }
+)
+```
 
 ## 📚 Documentation
 

@@ -62,19 +62,38 @@ class SmartTable:
         files = {'file': (file_name, file_data)}
         return self.client.request("POST", "smart-tables/upload-file", files=files)
 
-    def create(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def create(self, project_id: int, name: str, brief: str, input_asset_id: int,
+               additional_params: Dict[str, Any] = None) -> Dict[str, Any]:
         """
         Create a new smart table based on uploaded file.
 
         Typically you would first upload a file using the upload method,
         then use the returned file ID to create a smart table.
 
-        :param data: Smart table creation parameters
+        :param project_id: ID of the project to create the smart table in
+        :param name: Smart table title
+        :param brief: Detailed instructions for smart table generation
+        :param input_asset_id: ID of the input asset (XLSX file) from upload method
+        :param additional_params: Optional parameters including:
+            - quality (str): Quality level for content generation (premium/standard)
+            - limitRows (int): Number of rows to process (0 for all)
+            - offsetRows (int): Number of rows to skip before processing
+            - columns (list): Column definitions for the smart table
         :return: Dictionary with created smart table details
         :raises: AuthenticationError if API key is invalid
         :raises: ValidationError if required parameters are missing
         :raises: AccessDeniedError if permission denied
         """
+        data = {
+            'projectId': project_id,
+            'name': name,
+            'brief': brief,
+            'inputAssetId': input_asset_id
+        }
+
+        if additional_params:
+            data.update(additional_params)
+
         return self.client.request("POST", "smart-tables/create", data=data)
 
     def download(self, table_id: int, format: str = "xlsx", path: Optional[str] = None) -> Union[bytes, str]:

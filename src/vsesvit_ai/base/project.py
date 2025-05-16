@@ -35,16 +35,27 @@ class Project:
 
         return self.client.request("GET", f"projects/{project_id}")
 
-    def create(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    def create(self, name: str, description: str,
+               additional_params: Dict[str, Any] = None) -> Dict[str, Any]:
         """
         Create a new project with flexible configuration options.
 
-        :param data: Project creation parameters
+        :param name: Project name
+        :param description: Detailed description of the project
+        :param additional_params: Optional parameters (if any additional ones exist)
         :return: Dictionary with created project details
         :raises: AuthenticationError if API key is invalid
         :raises: ValidationError if required parameters are missing
         :raises: AccessDeniedError if permission denied
         """
+        data = {
+            'name': name,
+            'description': description
+        }
+
+        if additional_params:
+            data.update(additional_params)
+
         return self.client.request("POST", "projects/create", data=data)
 
     def archive(self, project_id: int) -> Dict[str, Any]:
